@@ -8,7 +8,7 @@ module "iam" {
   iam_role_path                     = var.iam_role_path
   permissions_boundary_arn          = var.permissions_boundary_arn
   partition                         = data.aws_partition.current.partition
-  region                            = data.aws_region.current.region
+  region                            = data.aws_region.current.name
   tags                              = var.tags
   s3_bucket_permissions             = var.dd_forwarder_existing_bucket_name != null || local.create_s3_bucket
   forwarder_bucket_arn              = local.create_s3_bucket ? aws_s3_bucket.forwarder_bucket[0].arn : null
@@ -227,7 +227,7 @@ resource "aws_lambda_permission" "cloudwatch_logs_invoke" {
   function_name  = aws_lambda_function.forwarder.function_name
   principal      = data.aws_partition.current.partition == "aws-cn" ? "logs.amazonaws.com.cn" : "logs.amazonaws.com"
   source_account = data.aws_caller_identity.current.account_id
-  source_arn     = "arn:${data.aws_partition.current.partition}:logs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:log-group:*:*"
+  source_arn     = "arn:${data.aws_partition.current.partition}:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:*:*"
 }
 
 resource "aws_lambda_permission" "s3_invoke" {

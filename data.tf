@@ -22,7 +22,7 @@ locals {
   create_s3_bucket = (coalesce(var.dd_fetch_log_group_tags, false) || coalesce(var.dd_fetch_lambda_tags, false) || coalesce(var.dd_fetch_s3_tags, false) || coalesce(var.dd_store_failed_events, false)) && var.dd_forwarder_existing_bucket_name == null
 
   # Default layer ARN based on partition and region
-  default_layer_arn = "arn:${data.aws_partition.current.partition}:lambda:${data.aws_region.current.region}:${local.dd_account_id}:layer:Datadog-Forwarder:${local.layer_version}"
+  default_layer_arn = "arn:${data.aws_partition.current.partition}:lambda:${data.aws_region.current.name}:${local.dd_account_id}:layer:Datadog-Forwarder:${local.layer_version}"
 
   # Account ID varies by partition
   dd_account_id = data.aws_partition.current.partition == "aws-us-gov" ? "002406178527" : "464622532012"
